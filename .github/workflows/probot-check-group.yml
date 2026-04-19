@@ -1,6 +1,7 @@
 name: Probot
 
 on:
+  # Probot only polls check statuses and posts comments; it never checks out PR code, so this is safe to do.
   pull_request_target:
     types: [opened, reopened, ready_for_review, synchronize] # added `ready_for_review` since draft is skipped
 
