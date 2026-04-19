@@ -1,0 +1,3 @@
+tests/tests_pytorch/my_dir/test_standalone.py::test_standalone_command
+
+[32m[32m1 test collected[0m[32m in 0.01s[0m[0m
