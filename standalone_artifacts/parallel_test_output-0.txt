@@ -1,6 +1,0 @@
-[1m============================= test session starts ==============================[0m
-[1mcollecting ... [0mcollected 1 item
-
-tests/tests_pytorch/my_dir/test_standalone.py::test_standalone_command [32mPASSED[0m
-
-[32m============================== [32m[1m1 passed[0m[32m in 0.03s[0m[32m ===============================[0m
