@@ -1,15 +1,15 @@
 name: Probot
 
 on:
-  pull_request:
+  pull_request_target:
     types: [opened, reopened, ready_for_review, synchronize] # added `ready_for_review` since draft is skipped
 
 permissions:
   pull-requests: write
+  issues: write
   contents: read
   checks: write
   statuses: write
-  issues: write
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}-${{ github.head_ref }}
@@ -17,7 +17,6 @@ concurrency:
 
 jobs:
   required-jobs:
-    permissions: write-all
     runs-on: ubuntu-latest
     if: github.event.pull_request.draft == false
     timeout-minutes: 71 # in case something is wrong with the internal timeout
