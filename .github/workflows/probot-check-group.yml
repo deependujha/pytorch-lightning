@@ -9,6 +9,7 @@ permissions:
   contents: read
   checks: write
   statuses: write
+  issues: write
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}-${{ github.head_ref }}
@@ -16,12 +17,11 @@ concurrency:
 
 jobs:
   required-jobs:
-    # permissions: write-all
     runs-on: ubuntu-latest
     if: github.event.pull_request.draft == false
     timeout-minutes: 71 # in case something is wrong with the internal timeout
     steps:
-      - uses: Lightning-AI/probot@v5.5
+      - uses: Lightning-AI/probot@v5
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
