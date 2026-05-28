@@ -220,3 +220,16 @@ def test_ddp_dont_configure_sync_batchnorm(trainer_fn):
     trainer.strategy.setup(trainer)
     # because TrainerFn is not FITTING, model is not configured with sync batchnorm
     assert not isinstance(trainer.strategy.model.layer, torch.nn.modules.batchnorm.SyncBatchNorm)
+
+
+@mock.patch("torch.autograd.graph.set_warn_on_accumulate_grad_stream_mismatch", create=True)
+def test_setup_suppress_accumulate_grad_stream_mismatch_pytorch(set_warn_mock):
+    model = torch.nn.Linear(2, 2)
+    strategy = DDPStrategy(parallel_devices=[torch.device("cuda", 0)])
+    with (
+        mock.patch("lightning.pytorch.strategies.ddp.DistributedDataParallel"),
+        mock.patch("torch.cuda.Stream"),
+        mock.patch("torch.cuda.stream"),
+    ):
+        strategy._setup_model(model)
+    set_warn_mock.assert_called_once_with(False)

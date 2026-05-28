@@ -218,3 +218,16 @@ def test_device_id_passed_for_cuda_devices(init_process_group_mock):
         timeout=cuda_strategy._timeout,
         **kwargs,
     )
+
+
+@mock.patch("torch.autograd.graph.set_warn_on_accumulate_grad_stream_mismatch", create=True)
+def test_setup_suppress_accumulate_grad_stream_mismatch(set_warn_mock):
+    model = torch.nn.Linear(2, 2)
+    strategy = DDPStrategy(parallel_devices=[torch.device("cuda", 0)], cluster_environment=LightningEnvironment())
+    with (
+        mock.patch("lightning.fabric.strategies.ddp.DistributedDataParallel"),
+        mock.patch("torch.cuda.Stream"),
+        mock.patch("torch.cuda.stream"),
+    ):
+        strategy.setup_module(model)
+    set_warn_mock.assert_called_once_with(False)

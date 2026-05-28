@@ -192,6 +192,8 @@ class DDPStrategy(ParallelStrategy):
         log.debug(f"setting up DDP model with device ids: {device_ids}, kwargs: {self._ddp_kwargs}")
         # https://pytorch.org/docs/stable/notes/cuda.html#id5
         ctx = torch.cuda.stream(torch.cuda.Stream()) if device_ids is not None else nullcontext()
+        if hasattr(torch.autograd.graph, "set_warn_on_accumulate_grad_stream_mismatch"):
+            torch.autograd.graph.set_warn_on_accumulate_grad_stream_mismatch(False)
         with ctx:
             return DistributedDataParallel(module=model, device_ids=device_ids, **self._ddp_kwargs)
 
